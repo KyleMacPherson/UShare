@@ -29,7 +29,7 @@ _Coordinates_
     will add new coordinates if auth key correct
     will not add new coordinates if auth key incorrect
   + put request to /coordinates
-    will update coordinates if auth key correct (FAILED - 1)
+    will update coordinates if auth key correct
     will not update coordinates if auth key incorrect
 
 _Sessions_
@@ -76,3 +76,15 @@ _User_
     + requires password_confirmation
     + should require case sensitive unique value for email
     + requires password of at least 5 characters
+
+#### Frontend
+
+A Meteor frontend with JavaScript and Angular thrown in, which hits the Googlemaps API for geolocations and uses leaflet for mapping.
+
+__Tools:__
+
+Testing: Karma, Protractor
+
+Code: JavaScript, Angular
+
+Other: Meteor, Leaflet, MongoDB

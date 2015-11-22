@@ -1,28 +1,78 @@
-== README
+## UShare
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+An app that connects you with friends, old and new, around you who are making similar journeys so you can get home safely and economically.
 
-Things you may want to cover:
+Check out how it works [here!](https://github.com/KyleMacPherson/RaveBot)
 
-* Ruby version
+#### Backend
 
-* System dependencies
+A Rails API connected to a PostgreSQL database allows users to sign up, sign in, store their details and create new journeys securely using encrypted passwords and randomly generated authorisation keys.
 
-* Configuration
+__Breakdown of models:__
 
-* Database creation
+User
+Session
+Coordinate
 
-* Database initialization
+__Tools:__
 
-* How to run the test suite
+Testing: Racktest
 
-* Services (job queues, cache servers, search engines, etc.)
+Code: Ruby on Rails
 
-* Deployment instructions
+Other: PostgreSQL, Rack-Cors, BCrypt, FactoryGirl, HTTParty
 
-* ...
+__Tests:__
 
+_Coordinates_
+  + post request to /coordinates
+    will add new coordinates if auth key correct
+    will not add new coordinates if auth key incorrect
+  + put request to /coordinates
+    will update coordinates if auth key correct (FAILED - 1)
+    will not update coordinates if auth key incorrect
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+_Sessions_
+  + post request to /sessions
+    + when password is correct
+      + can start a new session
+      + returns authorisation key
+    + when password is wrong
+      + returns 401 status code
+      + renders error message
+      + does not return authorisation key
+  + sign out
+    + deletes the session with correct credentials
+    + cannot delete the session with incorrect credentials
+
+_Users_
+  + post request to /users
+    + with correct details
+      + creates new user
+      + returns an authorisation key
+    + with incorrect details
+      + it displays an error message
+      + it has a status code of 401
+  + delete request to /users
+      + with valide authorisation key deletes the user's record
+      + cannot delete with incorrect credentials
+
+_CoordinatesHelper_
+  + returns false if coordinate instance does not have all 4 coordinates
+  + returns true if coordinate instance has all 4 coordinates
+
+_Coordinate_
+  + should belong to session
+
+_Session_
+  + should belong to user
+  + should have many coordinates dependent => destroy
+
+_User_
+  + should have many sessions dependent => destroy
+  + Validations
+    + should have a secure password
+    + requires email
+    + requires password_confirmation
+    + should require case sensitive unique value for email
+    + requires password of at least 5 characters
